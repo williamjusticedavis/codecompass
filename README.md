@@ -1,4 +1,4 @@
-# Explain My Codebase
+# CodeCompass
 
 An AI-powered developer onboarding and architecture understanding tool that helps developers quickly understand unfamiliar codebases.
 
@@ -31,7 +31,7 @@ An AI-powered developer onboarding and architecture understanding tool that help
 
 ```bash
 git clone <your-repo-url>
-cd explain-my-codebase
+cd codecompass
 ```
 
 ### 2. Install dependencies
@@ -47,6 +47,7 @@ cp .env.example .env
 ```
 
 Edit `.env` and add your configuration:
+
 - `ANTHROPIC_API_KEY`: Your Claude API key
 - `DATABASE_URL`: PostgreSQL connection string
 - `JWT_SECRET`: Secret key for JWT token generation
@@ -58,6 +59,7 @@ bun run docker:dev
 ```
 
 This will start:
+
 - PostgreSQL database (with pgvector)
 - Backend API server
 - Frontend development server

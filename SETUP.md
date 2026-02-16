@@ -5,6 +5,7 @@
 Before you begin, ensure you have the following installed:
 
 1. **Bun** (>= 1.0.0)
+
    ```bash
    curl -fsSL https://bun.sh/install | bash
    ```
@@ -27,6 +28,7 @@ curl -fsSL https://bun.sh/install | bash
 ```
 
 Then restart your terminal or run:
+
 ```bash
 source ~/.bashrc  # or ~/.zshrc
 ```
@@ -55,6 +57,7 @@ bun run docker:dev:build
 ```
 
 This will:
+
 - Start PostgreSQL database with pgvector extension
 - Start the backend API server (port 3000)
 - Start the frontend dev server (port 5173)
@@ -245,11 +248,13 @@ Once authentication is working, we'll implement:
 If you encounter issues:
 
 1. Check the logs:
+
    ```bash
    docker-compose -f docker-compose.dev.yml logs -f
    ```
 
 2. Restart services:
+
    ```bash
    bun run docker:down
    bun run docker:dev:build

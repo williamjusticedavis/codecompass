@@ -29,7 +29,7 @@ export function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-primary-100 px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-primary-900 mb-2">Explain My Codebase</h1>
+          <h1 className="text-4xl font-bold text-primary-900 mb-2">CodeCompass</h1>
           <p className="text-gray-600">AI-powered codebase understanding tool</p>
         </div>
 
