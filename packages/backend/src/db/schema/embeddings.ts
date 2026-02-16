@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, text, timestamp, jsonb, vector } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, text, timestamp, jsonb } from 'drizzle-orm/pg-core';
 import { projects } from './projects';
 
 export const embeddings = pgTable('embeddings', {
@@ -7,7 +7,8 @@ export const embeddings = pgTable('embeddings', {
   entityType: varchar('entity_type', { length: 50 }).notNull(), // 'file', 'function', 'chunk'
   entityId: uuid('entity_id').notNull(),
   contentPreview: text('content_preview'),
-  embedding: vector('embedding', { dimensions: 1024 }), // Claude's embedding dimension
+  // Note: Using text for now, will migrate to vector type in Phase 5
+  embedding: text('embedding'), // Will store as JSON array for now
   metadata: jsonb('metadata'), // { path, name, language, etc }
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
