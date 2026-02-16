@@ -22,8 +22,9 @@ export function useProjectStatus(id: string, enabled: boolean = true) {
     queryKey: ['projects', id, 'status'],
     queryFn: () => projectsApi.getProjectStatus(id),
     enabled: !!id && enabled,
-    refetchInterval: (data) => {
+    refetchInterval: (query) => {
       // Poll every 2 seconds if job is pending or processing
+      const data = query.state.data;
       if (data?.job?.status === 'pending' || data?.job?.status === 'processing') {
         return 2000;
       }
