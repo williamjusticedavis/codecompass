@@ -29,12 +29,8 @@ export function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-primary-100 px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-primary-900 mb-2">
-            Explain My Codebase
-          </h1>
-          <p className="text-gray-600">
-            AI-powered codebase understanding tool
-          </p>
+          <h1 className="text-4xl font-bold text-primary-900 mb-2">Explain My Codebase</h1>
+          <p className="text-gray-600">AI-powered codebase understanding tool</p>
         </div>
 
         <div className="card p-8">
@@ -77,11 +73,7 @@ export function LoginPage() {
               />
             </div>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="btn btn-primary w-full"
-            >
+            <button type="submit" disabled={isLoading} className="btn btn-primary w-full">
               {isLoading ? 'Logging in...' : 'Login'}
             </button>
           </form>

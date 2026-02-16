@@ -8,7 +8,8 @@ export default {
   out: './src/db/migrations',
   driver: 'pg',
   dbCredentials: {
-    connectionString: process.env.DATABASE_URL || 'postgresql://dev:dev@localhost:5432/explain_codebase_dev',
+    connectionString:
+      process.env.DATABASE_URL || 'postgresql://dev:dev@localhost:5432/explain_codebase_dev',
   },
   verbose: true,
   strict: true,

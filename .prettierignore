@@ -1,0 +1,16 @@
+node_modules
+dist
+build
+.next
+.cache
+coverage
+*.lock
+*.lockb
+bun.lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Generated files
+*.min.js
+*.min.css

@@ -32,11 +32,7 @@ export async function authenticateToken(
   }
 }
 
-export function optionalAuth(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void {
+export function optionalAuth(req: Request, res: Response, next: NextFunction): void {
   try {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];

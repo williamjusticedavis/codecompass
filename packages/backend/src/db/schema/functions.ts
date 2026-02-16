@@ -1,11 +1,24 @@
-import { pgTable, uuid, varchar, text, integer, timestamp, jsonb, boolean } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  uuid,
+  varchar,
+  text,
+  integer,
+  timestamp,
+  jsonb,
+  boolean,
+} from 'drizzle-orm/pg-core';
 import { projects } from './projects';
 import { files } from './files';
 
 export const functions = pgTable('functions', {
   id: uuid('id').primaryKey().defaultRandom(),
-  fileId: uuid('file_id').references(() => files.id, { onDelete: 'cascade' }).notNull(),
-  projectId: uuid('project_id').references(() => projects.id, { onDelete: 'cascade' }).notNull(),
+  fileId: uuid('file_id')
+    .references(() => files.id, { onDelete: 'cascade' })
+    .notNull(),
+  projectId: uuid('project_id')
+    .references(() => projects.id, { onDelete: 'cascade' })
+    .notNull(),
   name: varchar('name', { length: 255 }).notNull(),
   type: varchar('type', { length: 50 }), // 'function', 'class', 'component', 'method'
   signature: text('signature'),

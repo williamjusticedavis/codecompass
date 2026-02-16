@@ -16,18 +16,11 @@ export function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-xl font-bold text-primary-900">
-                Explain My Codebase
-              </h1>
+              <h1 className="text-xl font-bold text-primary-900">Explain My Codebase</h1>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">
-                {user?.email}
-              </span>
-              <button
-                onClick={handleLogout}
-                className="btn btn-secondary text-sm"
-              >
+              <span className="text-sm text-gray-600">{user?.email}</span>
+              <button onClick={handleLogout} className="btn btn-secondary text-sm">
                 Logout
               </button>
             </div>
@@ -48,9 +41,7 @@ export function DashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="card p-6">
             <h3 className="text-lg font-semibold mb-2">Your Projects</h3>
-            <p className="text-gray-600 text-sm mb-4">
-              Analyze and understand your codebases
-            </p>
+            <p className="text-gray-600 text-sm mb-4">Analyze and understand your codebases</p>
             <button className="btn btn-primary" disabled>
               Coming in Phase 2
             </button>
@@ -58,9 +49,7 @@ export function DashboardPage() {
 
           <div className="card p-6">
             <h3 className="text-lg font-semibold mb-2">Recent Analyses</h3>
-            <p className="text-gray-600 text-sm mb-4">
-              View your latest code analyses
-            </p>
+            <p className="text-gray-600 text-sm mb-4">View your latest code analyses</p>
             <button className="btn btn-secondary" disabled>
               Coming Soon
             </button>
@@ -68,9 +57,7 @@ export function DashboardPage() {
 
           <div className="card p-6">
             <h3 className="text-lg font-semibold mb-2">Search</h3>
-            <p className="text-gray-600 text-sm mb-4">
-              Semantic search across codebases
-            </p>
+            <p className="text-gray-600 text-sm mb-4">Semantic search across codebases</p>
             <button className="btn btn-secondary" disabled>
               Coming in Phase 5
             </button>
@@ -86,7 +73,9 @@ export function DashboardPage() {
             </div>
             <div className="flex items-center gap-3">
               <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-              <span className="text-sm text-gray-600">Phase 2: Project Ingestion - Coming Next</span>
+              <span className="text-sm text-gray-600">
+                Phase 2: Project Ingestion - Coming Next
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-4 h-4 rounded-full bg-gray-300"></div>

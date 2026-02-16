@@ -23,11 +23,14 @@ export class AuthService {
     const passwordHash = await bcrypt.hash(input.password, this.SALT_ROUNDS);
 
     // Create user
-    const [newUser] = await db.insert(users).values({
-      email: input.email,
-      passwordHash,
-      name: input.name,
-    }).returning();
+    const [newUser] = await db
+      .insert(users)
+      .values({
+        email: input.email,
+        passwordHash,
+        name: input.name,
+      })
+      .returning();
 
     // Generate tokens
     const token = generateToken({ userId: newUser.id, email: newUser.email });
@@ -63,9 +66,7 @@ export class AuthService {
     }
 
     // Update last login
-    await db.update(users)
-      .set({ lastLogin: new Date() })
-      .where(eq(users.id, user.id));
+    await db.update(users).set({ lastLogin: new Date() }).where(eq(users.id, user.id));
 
     // Generate tokens
     const token = generateToken({ userId: user.id, email: user.email });

@@ -23,11 +23,17 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Clear auth data on 401
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+      // Only redirect to login if we're not already on auth pages
+      const isAuthPage =
+        window.location.pathname === '/login' || window.location.pathname === '/register';
+
+      if (!isAuthPage) {
+        // Clear auth data on 401
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

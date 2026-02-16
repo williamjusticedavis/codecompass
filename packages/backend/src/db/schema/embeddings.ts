@@ -3,7 +3,9 @@ import { projects } from './projects';
 
 export const embeddings = pgTable('embeddings', {
   id: uuid('id').primaryKey().defaultRandom(),
-  projectId: uuid('project_id').references(() => projects.id, { onDelete: 'cascade' }).notNull(),
+  projectId: uuid('project_id')
+    .references(() => projects.id, { onDelete: 'cascade' })
+    .notNull(),
   entityType: varchar('entity_type', { length: 50 }).notNull(), // 'file', 'function', 'chunk'
   entityId: uuid('entity_id').notNull(),
   contentPreview: text('content_preview'),

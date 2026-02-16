@@ -3,7 +3,9 @@ import { projects } from './projects';
 
 export const files = pgTable('files', {
   id: uuid('id').primaryKey().defaultRandom(),
-  projectId: uuid('project_id').references(() => projects.id, { onDelete: 'cascade' }).notNull(),
+  projectId: uuid('project_id')
+    .references(() => projects.id, { onDelete: 'cascade' })
+    .notNull(),
   path: text('path').notNull(),
   name: varchar('name', { length: 255 }).notNull(),
   extension: varchar('extension', { length: 50 }),

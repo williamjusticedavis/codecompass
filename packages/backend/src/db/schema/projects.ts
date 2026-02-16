@@ -3,7 +3,9 @@ import { users } from './users';
 
 export const projects = pgTable('projects', {
   id: uuid('id').primaryKey().defaultRandom(),
-  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  userId: uuid('user_id')
+    .references(() => users.id, { onDelete: 'cascade' })
+    .notNull(),
   name: varchar('name', { length: 255 }).notNull(),
   description: text('description'),
   sourceType: varchar('source_type', { length: 50 }).notNull(), // 'github' or 'upload'

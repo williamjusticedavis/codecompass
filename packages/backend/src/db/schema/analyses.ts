@@ -3,7 +3,9 @@ import { projects } from './projects';
 
 export const analyses = pgTable('analyses', {
   id: uuid('id').primaryKey().defaultRandom(),
-  projectId: uuid('project_id').references(() => projects.id, { onDelete: 'cascade' }).notNull(),
+  projectId: uuid('project_id')
+    .references(() => projects.id, { onDelete: 'cascade' })
+    .notNull(),
   analysisType: varchar('analysis_type', { length: 100 }).notNull(), // 'overview', 'architecture', 'dependencies', 'onboarding'
   result: jsonb('result').notNull(),
   tokensUsed: integer('tokens_used'),

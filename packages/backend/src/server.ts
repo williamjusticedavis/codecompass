@@ -11,10 +11,12 @@ export function createServer(): Express {
 
   // Security middleware
   app.use(helmet());
-  app.use(cors({
-    origin: env.CORS_ORIGIN,
-    credentials: true,
-  }));
+  app.use(
+    cors({
+      origin: env.CORS_ORIGIN,
+      credentials: true,
+    })
+  );
 
   // Body parsing middleware
   app.use(express.json({ limit: '10mb' }));

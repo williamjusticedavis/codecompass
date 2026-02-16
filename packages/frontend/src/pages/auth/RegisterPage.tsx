@@ -30,12 +30,8 @@ export function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-primary-100 px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-primary-900 mb-2">
-            Explain My Codebase
-          </h1>
-          <p className="text-gray-600">
-            AI-powered codebase understanding tool
-          </p>
+          <h1 className="text-4xl font-bold text-primary-900 mb-2">Explain My Codebase</h1>
+          <p className="text-gray-600">AI-powered codebase understanding tool</p>
         </div>
 
         <div className="card p-8">
@@ -91,16 +87,10 @@ export function RegisterPage() {
                 required
                 minLength={8}
               />
-              <p className="mt-1 text-xs text-gray-500">
-                Must be at least 8 characters
-              </p>
+              <p className="mt-1 text-xs text-gray-500">Must be at least 8 characters</p>
             </div>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="btn btn-primary w-full"
-            >
+            <button type="submit" disabled={isLoading} className="btn btn-primary w-full">
               {isLoading ? 'Creating account...' : 'Sign up'}
             </button>
           </form>
