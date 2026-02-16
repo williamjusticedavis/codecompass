@@ -2,12 +2,13 @@ import { createServer } from './server';
 import { env } from './config/env';
 import { logger } from './utils/logger';
 import { db } from './db';
+import { sql } from 'drizzle-orm';
 
 async function startServer() {
   try {
     // Test database connection
     logger.info('Testing database connection...');
-    await db.execute('SELECT 1');
+    await db.execute(sql`SELECT 1`);
     logger.info('✓ Database connected successfully');
 
     // Create and start Express server
