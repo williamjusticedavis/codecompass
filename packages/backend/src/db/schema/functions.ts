@@ -30,6 +30,7 @@ export const functions = pgTable('functions', {
   returnType: varchar('return_type', { length: 255 }),
   isExported: boolean('is_exported').default(false),
   isAsync: boolean('is_async').default(false),
+  accessibility: varchar('accessibility', { length: 20 }), // 'public', 'private', 'protected'
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 

@@ -1,10 +1,11 @@
 import { db } from '../db';
-import { projects, files } from '../db/schema';
+import { projects, files, functions, dependencies } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { githubService } from './github.service';
 import { uploadService } from './upload.service';
 import { fileDiscoveryService } from './fileDiscovery.service';
 import { jobQueue, type Job } from './jobQueue.service';
+import { parserService } from '../parsers';
 import { logger } from '../utils/logger';
 
 export interface CreateGitHubProjectInput {
@@ -218,7 +219,92 @@ export class RepositoryService {
         jobQueue.updateJobProgress(job.id, progress);
       }
 
-      // Step 4: Update project with metadata
+      // Step 4: Parse files and extract functions/dependencies
+      logger.info('Parsing files', { projectId });
+
+      const storedFiles = await db.select().from(files).where(eq(files.projectId, projectId));
+
+      let parsedCount = 0;
+      const fileBatchSize = 50;
+
+      for (let i = 0; i < storedFiles.length; i += fileBatchSize) {
+        const batch = storedFiles.slice(i, i + fileBatchSize);
+
+        for (const file of batch) {
+          try {
+            // Skip if no content (binary files) or no extension
+            if (!file.content || !file.extension) {
+              continue;
+            }
+
+            // Check if file can be parsed
+            if (!parserService.canParse(file.extension)) {
+              continue;
+            }
+
+            // Parse the file
+            const parseResult = parserService.parseFile(file.content, file.extension);
+            if (!parseResult) {
+              continue;
+            }
+
+            // Store extracted functions
+            if (parseResult.functions.length > 0) {
+              const functionRecords = parseResult.functions.map((fn) => ({
+                fileId: file.id,
+                projectId,
+                name: fn.name,
+                type: fn.type,
+                signature: fn.signature,
+                docComment: fn.docComment,
+                startLine: fn.startLine,
+                endLine: fn.endLine,
+                parameters: fn.parameters,
+                returnType: fn.returnType,
+                isExported: fn.isExported,
+                isAsync: fn.isAsync,
+                accessibility: fn.accessibility,
+              }));
+
+              await db.insert(functions).values(functionRecords);
+            }
+
+            // Store dependencies (imports)
+            if (parseResult.imports.length > 0) {
+              const dependencyRecords = parseResult.imports.map((imp) => ({
+                projectId,
+                sourceFileId: file.id,
+                targetFileId: null, // Will be resolved in a later phase
+                targetExternal: imp.importPath.startsWith('.') ? null : imp.importPath,
+                dependencyType: 'import',
+                importSpecifier: imp.importedNames.join(', '),
+              }));
+
+              await db.insert(dependencies).values(dependencyRecords);
+            }
+
+            parsedCount++;
+          } catch (error) {
+            logger.warn('Failed to parse file', {
+              projectId,
+              fileId: file.id,
+              path: file.path,
+              error,
+            });
+          }
+        }
+
+        const progress = 90 + Math.floor((i / storedFiles.length) * 10);
+        jobQueue.updateJobProgress(job.id, progress);
+      }
+
+      logger.info('Files parsed', {
+        projectId,
+        parsedCount,
+        totalFiles: storedFiles.length,
+      });
+
+      // Step 5: Update project with metadata
       const primaryLanguage = fileDiscoveryService.getPrimaryLanguage(
         discovery.stats.languageBreakdown
       );
@@ -238,6 +324,7 @@ export class RepositoryService {
       logger.info('Project analysis completed', {
         projectId,
         totalFiles: discovery.stats.totalFiles,
+        parsedCount,
         primaryLanguage,
       });
 
