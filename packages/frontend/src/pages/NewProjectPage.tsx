@@ -23,12 +23,13 @@ export function NewProjectPage() {
     e.preventDefault();
 
     try {
-      const result = await createGitHub.mutateAsync({
+      await createGitHub.mutateAsync({
         url: githubUrl,
         branch: githubBranch || undefined,
       });
 
-      navigate(`/projects/${result.project.id}`);
+      // Redirect to projects list where user can see analysis progress
+      navigate('/projects');
     } catch (error: any) {
       console.error('Failed to create project:', error);
     }
@@ -42,12 +43,13 @@ export function NewProjectPage() {
     }
 
     try {
-      const result = await createUpload.mutateAsync({
+      await createUpload.mutateAsync({
         name: projectName,
         file,
       });
 
-      navigate(`/projects/${result.project.id}`);
+      // Redirect to projects list where user can see analysis progress
+      navigate('/projects');
     } catch (error: any) {
       console.error('Failed to create project:', error);
     }
