@@ -37,14 +37,8 @@ export class RepositoryService {
 
       logger.info('Creating GitHub project', { userId, repoInfo });
 
-      // Validate repository is accessible
-      const isValid = await githubService.validateRepository(url);
-      if (!isValid) {
-        throw new Error('Repository is not accessible. Please check the URL and permissions.');
-      }
-
-      // Get default branch if not specified
-      const targetBranch = branch || (await githubService.getDefaultBranch(url));
+      // Use provided branch or default to 'main'
+      const targetBranch = branch || 'main';
 
       // Create project record
       const [project] = await db
@@ -186,13 +180,16 @@ export class RepositoryService {
           batch.map(async (fileInfo) => {
             try {
               const content = await fileDiscoveryService.readFileContent(fileInfo.path);
+              const fileName = fileInfo.relativePath.split('/').pop() || 'unknown';
 
               return {
                 projectId,
+                name: fileName,
                 path: fileInfo.relativePath,
+                extension: fileInfo.extension,
                 content,
                 language: fileInfo.language,
-                size: fileInfo.size,
+                sizeBytes: fileInfo.size,
               };
             } catch (error) {
               logger.warn('Failed to read file content', {
