@@ -6,6 +6,14 @@ export function useProjects() {
   return useQuery({
     queryKey: ['projects'],
     queryFn: projectsApi.getProjects,
+    refetchInterval: (query) => {
+      // Poll every 3 seconds if any project is pending or processing
+      const projects = query.state.data;
+      const hasActiveProjects = projects?.some(
+        (p) => p.status === 'pending' || p.status === 'processing'
+      );
+      return hasActiveProjects ? 3000 : false;
+    },
   });
 }
 
@@ -39,7 +47,10 @@ export function useCreateGitHubProject() {
   return useMutation({
     mutationFn: (input: CreateGitHubProjectInput) => projectsApi.createGitHubProject(input),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({
+        queryKey: ['projects'],
+        refetchType: 'active',
+      });
     },
   });
 }
@@ -50,7 +61,10 @@ export function useCreateUploadProject() {
   return useMutation({
     mutationFn: (input: CreateUploadProjectInput) => projectsApi.createUploadProject(input),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({
+        queryKey: ['projects'],
+        refetchType: 'active',
+      });
     },
   });
 }
@@ -61,7 +75,11 @@ export function useDeleteProject() {
   return useMutation({
     mutationFn: (id: string) => projectsApi.deleteProject(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      // Force immediate refetch even if data is fresh
+      queryClient.invalidateQueries({
+        queryKey: ['projects'],
+        refetchType: 'active',
+      });
     },
   });
 }
