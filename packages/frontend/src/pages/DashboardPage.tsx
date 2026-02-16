@@ -34,7 +34,7 @@ export function DashboardPage() {
             Welcome{user?.name ? `, ${user.name}` : ''}!
           </h2>
           <p className="text-gray-600">
-            This is your dashboard. Phase 1 (Authentication) is complete!
+            Phase 2 (Project Ingestion) is now complete! You can add and analyze projects.
           </p>
         </div>
 
@@ -42,8 +42,8 @@ export function DashboardPage() {
           <div className="card p-6">
             <h3 className="text-lg font-semibold mb-2">Your Projects</h3>
             <p className="text-gray-600 text-sm mb-4">Analyze and understand your codebases</p>
-            <button className="btn btn-primary" disabled>
-              Coming in Phase 2
+            <button className="btn btn-primary" onClick={() => navigate('/projects')}>
+              View Projects
             </button>
           </div>
 
@@ -72,10 +72,8 @@ export function DashboardPage() {
               <span className="text-sm">Phase 1: Authentication - Complete!</span>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-              <span className="text-sm text-gray-600">
-                Phase 2: Project Ingestion - Coming Next
-              </span>
+              <div className="w-4 h-4 rounded-full bg-green-500"></div>
+              <span className="text-sm">Phase 2: Project Ingestion - Complete!</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-4 h-4 rounded-full bg-gray-300"></div>

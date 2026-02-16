@@ -5,6 +5,7 @@ import { env } from './config/env';
 import { logger } from './utils/logger';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware';
 import { authRouter } from './routes/auth.routes';
+import projectsRouter from './routes/projects.routes';
 
 export function createServer(): Express {
   const app = express();
@@ -39,6 +40,7 @@ export function createServer(): Express {
 
   // API routes
   app.use('/api/auth', authRouter);
+  app.use('/api/projects', projectsRouter);
 
   // 404 handler
   app.use(notFoundHandler);
