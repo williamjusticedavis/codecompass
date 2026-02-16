@@ -180,6 +180,12 @@ export class RepositoryService {
           batch.map(async (fileInfo) => {
             try {
               const content = await fileDiscoveryService.readFileContent(fileInfo.path);
+
+              // Skip binary files (content is null)
+              if (content === null) {
+                return null;
+              }
+
               const fileName = fileInfo.relativePath.split('/').pop() || 'unknown';
 
               return {

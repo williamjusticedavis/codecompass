@@ -209,14 +209,53 @@ export class FileDiscoveryService {
   }
 
   /**
+   * Check if file contains binary content
+   */
+  private async isBinaryFile(filePath: string): Promise<boolean> {
+    try {
+      // Read first 8000 bytes to check for null bytes
+      const buffer = Buffer.alloc(8000);
+      const fd = await fs.open(filePath, 'r');
+      const { bytesRead } = await fd.read(buffer, 0, 8000, 0);
+      await fd.close();
+
+      // Check for null bytes (indicator of binary content)
+      for (let i = 0; i < bytesRead; i++) {
+        if (buffer[i] === 0) {
+          return true;
+        }
+      }
+
+      return false;
+    } catch (error) {
+      // If we can't read it, assume it's binary
+      return true;
+    }
+  }
+
+  /**
    * Read file content
    */
-  async readFileContent(filePath: string): Promise<string> {
+  async readFileContent(filePath: string): Promise<string | null> {
     try {
-      return await fs.readFile(filePath, 'utf-8');
+      // Check if file is binary
+      if (await this.isBinaryFile(filePath)) {
+        logger.debug('Skipping binary file', { filePath });
+        return null;
+      }
+
+      const content = await fs.readFile(filePath, 'utf-8');
+
+      // Additional check: if content has null bytes after reading, skip it
+      if (content.includes('\0')) {
+        logger.debug('Skipping file with null bytes', { filePath });
+        return null;
+      }
+
+      return content;
     } catch (error) {
-      logger.error('Failed to read file', { filePath, error });
-      throw new Error('Failed to read file content');
+      logger.warn('Failed to read file', { filePath, error });
+      return null;
     }
   }
 
