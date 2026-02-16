@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { useProjects, useDeleteProject } from '../hooks/useProjects';
 import { useAuth } from '../hooks/useAuth';
+import { ConfirmDialog } from '../components/common/ConfirmDialog';
 import type { Project } from '../types/project.types';
 
 export function ProjectsPage() {
@@ -9,18 +12,32 @@ export function ProjectsPage() {
   const { data: projects, isLoading, error } = useProjects();
   const deleteProject = useDeleteProject();
 
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
+
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
   const handleDelete = async (projectId: string) => {
-    if (window.confirm('Are you sure you want to delete this project?')) {
-      try {
-        await deleteProject.mutateAsync(projectId);
-      } catch (error) {
-        console.error('Failed to delete project:', error);
-      }
+    setProjectToDelete(projectId);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!projectToDelete) return;
+
+    try {
+      await deleteProject.mutateAsync(projectToDelete);
+      toast.success('Project deleted successfully');
+    } catch (error: any) {
+      const message = error?.response?.data?.message || 'Failed to delete project';
+      toast.error('Delete failed', {
+        description: message,
+      });
+    } finally {
+      setProjectToDelete(null);
     }
   };
 
@@ -47,6 +64,17 @@ export function ProjectsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ConfirmDialog
+        isOpen={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        onConfirm={confirmDelete}
+        title="Delete Project"
+        description="Are you sure you want to delete this project? This action cannot be undone and all project data will be permanently removed."
+        confirmText="Delete"
+        cancelText="Cancel"
+        isDangerous
+      />
+
       <nav className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { useCreateGitHubProject, useCreateUploadProject } from '../hooks/useProjects';
 
 type SourceTab = 'github' | 'upload';
@@ -28,10 +29,17 @@ export function NewProjectPage() {
         branch: githubBranch || undefined,
       });
 
+      toast.success('Project created successfully!', {
+        description: 'Analysis is now in progress...',
+      });
+
       // Redirect to projects list where user can see analysis progress
       navigate('/projects');
     } catch (error: any) {
-      console.error('Failed to create project:', error);
+      const message = error?.response?.data?.message || 'Failed to create project';
+      toast.error('Failed to create project', {
+        description: message,
+      });
     }
   };
 
@@ -39,6 +47,9 @@ export function NewProjectPage() {
     e.preventDefault();
 
     if (!file) {
+      toast.error('No file selected', {
+        description: 'Please select a zip file to upload',
+      });
       return;
     }
 
@@ -48,10 +59,17 @@ export function NewProjectPage() {
         file,
       });
 
+      toast.success('Project uploaded successfully!', {
+        description: 'Analysis is now in progress...',
+      });
+
       // Redirect to projects list where user can see analysis progress
       navigate('/projects');
     } catch (error: any) {
-      console.error('Failed to create project:', error);
+      const message = error?.response?.data?.message || 'Failed to upload project';
+      toast.error('Upload failed', {
+        description: message,
+      });
     }
   };
 
