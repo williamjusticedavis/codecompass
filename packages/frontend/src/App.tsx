@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'sonner';
 import { AuthProvider } from './hooks/useAuth';
@@ -9,6 +9,12 @@ import { DashboardPage } from './pages/DashboardPage';
 import { ProjectsPage } from './pages/ProjectsPage';
 import { NewProjectPage } from './pages/NewProjectPage';
 import { ProjectDetailPage } from './pages/ProjectDetailPage';
+import { ProjectAnalysisPage } from './pages/ProjectAnalysisPage';
+
+function ProjectAnalysisWrapper() {
+  const { id } = useParams();
+  return <ProjectAnalysisPage key={id} />;
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -59,6 +65,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ProjectDetailPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/projects/:id/analysis"
+              element={
+                <ProtectedRoute>
+                  <ProjectAnalysisWrapper />
                 </ProtectedRoute>
               }
             />

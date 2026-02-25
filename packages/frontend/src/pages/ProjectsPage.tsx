@@ -236,6 +236,18 @@ export function ProjectsPage() {
                       View
                     </button>
                     <button
+                      onClick={() => navigate(`/projects/${project.id}/analysis`)}
+                      className="btn btn-primary text-sm"
+                      disabled={project.status !== 'completed'}
+                      title={
+                        project.status !== 'completed'
+                          ? 'Project must be fully processed before analysis'
+                          : 'View AI-powered analysis'
+                      }
+                    >
+                      Analyze
+                    </button>
+                    <button
                       onClick={() => handleDelete(project.id)}
                       className="px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                     >
